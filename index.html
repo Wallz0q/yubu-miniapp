@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Yubu Mini App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { background: #1c1c1e; color: white; font-family: sans-serif; text-align: center; padding: 20px; }
+        h1 { color: #0088cc; }
+        button { background: #0088cc; color: white; border: none; padding: 15px; border-radius: 8px; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <h1>🚀 Yubu Mini App</h1>
+    <p id="info">Loading...</p>
+    <button onclick="tutupApp()">Tutup Aplikasi</button>
+
+    <script>
+        // Ambil info user dari Telegram
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Biar layar penuh
+        const user = tg.initDataUnsafe?.user;
+        
+        if (user) {
+            document.getElementById('info').innerText = `Halo ${user.first_name}! ID lu: ${user.id}`;
+        } else {
+            document.getElementById('info').innerText = 'Halo, User!';
+        }
+
+        function tutupApp() {
+            tg.close();
+        }
+    </script>
+</body>
+</html>
