@@ -1,34 +1,239 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Yubu Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { background: #1c1c1e; color: white; font-family: sans-serif; text-align: center; padding: 20px; }
-        h1 { color: #0088cc; }
-        button { background: #0088cc; color: white; border: none; padding: 15px; border-radius: 8px; font-size: 16px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 24px;
+            background: linear-gradient(90deg, #00d4ff, #0088cc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+        }
+        .header p {
+            font-size: 13px;
+            color: #888;
+        }
+        .user-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00d4ff, #0088cc);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .user-info h2 {
+            font-size: 18px;
+            margin-bottom: 3px;
+        }
+        .user-info p {
+            font-size: 12px;
+            color: #888;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+            color: #00d4ff;
+        }
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .menu-item {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 18px 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: white;
+        }
+        .menu-item:active {
+            transform: scale(0.95);
+            background: rgba(0, 212, 255, 0.2);
+            border-color: #00d4ff;
+        }
+        .menu-item .icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .menu-item .label {
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .menu-item .desc {
+            font-size: 10px;
+            color: #888;
+            margin-top: 3px;
+        }
+        .footer-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #00d4ff, #0088cc);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 136, 204, 0.4);
+        }
+        .footer-btn:active {
+            transform: scale(0.97);
+        }
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #888;
+        }
     </style>
 </head>
 <body>
-    <h1>🚀 Yubu Mini App</h1>
-    <p id="info">Loading...</p>
-    <button onclick="tutupApp()">Tutup Aplikasi</button>
+    <div class="header">
+        <h1>🚀 YUBU MINI APP</h1>
+        <p>Userbot Panel v1.0</p>
+    </div>
+
+    <div class="user-card" id="userCard">
+        <div class="avatar" id="avatar">?</div>
+        <div class="user-info">
+            <h2 id="userName">Loading...</h2>
+            <p id="userId">ID: -</p>
+        </div>
+    </div>
+
+    <div class="section-title">📋 Menu Utama</div>
+    <div class="menu-grid">
+        <div class="menu-item" onclick="kirimPerintah('help')">
+            <span class="icon">📖</span>
+            <div class="label">Panduan</div>
+            <div class="desc">Cara pakai bot</div>
+        </div>
+        <div class="menu-item" onclick="kirimPerintah('menu')">
+            <span class="icon">📜</span>
+            <div class="label">Menu</div>
+            <div class="desc">Daftar fitur</div>
+        </div>
+        <div class="menu-item" onclick="kirimPerintah('ai')">
+            <span class="icon">🤖</span>
+            <div class="label">AI Chat</div>
+            <div class="desc">Gemini & GPT</div>
+        </div>
+        <div class="menu-item" onclick="kirimPerintah('download')">
+            <span class="icon">⬇️</span>
+            <div class="label">Downloader</div>
+            <div class="desc">TikTok, IG, YT</div>
+        </div>
+        <div class="menu-item" onclick="kirimPerintah('autoshare')">
+            <span class="icon">📢</span>
+            <div class="label">Auto Share</div>
+            <div class="desc">Broadcast pesan</div>
+        </div>
+        <div class="menu-item" onclick="kirimPerintah('settings')">
+            <span class="icon">⚙️</span>
+            <div class="label">Pengaturan</div>
+            <div class="desc">Jeda & Pesan</div>
+        </div>
+    </div>
+
+    <button class="footer-btn" onclick="tutupApp()">❌ Tutup Aplikasi</button>
 
     <script>
-        // Ambil info user dari Telegram
+        // Inisialisasi Telegram WebApp
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Biar layar penuh
+        tg.expand();
+        tg.setHeaderColor('#1a1a2e');
+        tg.setBackgroundColor('#1a1a2e');
+        tg.enableClosingConfirmation();
+
+        // Ambil data user Telegram
         const user = tg.initDataUnsafe?.user;
-        
+
         if (user) {
-            document.getElementById('info').innerText = `Halo ${user.first_name}! ID lu: ${user.id}`;
+            document.getElementById('userName').innerText = user.first_name + (user.last_name ? ' ' + user.last_name : '');
+            document.getElementById('userId').innerText = 'ID: ' + user.id + (user.username ? ' | @' + user.username : '');
+            document.getElementById('avatar').innerText = user.first_name.charAt(0).toUpperCase();
         } else {
-            document.getElementById('info').innerText = 'Halo, User!';
+            document.getElementById('userName').innerText = 'Guest';
+            document.getElementById('userId').innerText = 'Buka dari Telegram!';
+            document.getElementById('avatar').innerText = '?';
         }
 
+        // Fungsi kirim perintah ke bot
+        function kirimPerintah(perintah) {
+            if (!user) {
+                tg.showAlert('Buka Mini App ini dari dalam Telegram ya!');
+                return;
+            }
+
+            // Kirim data ke bot
+            tg.sendData(JSON.stringify({
+                action: perintah,
+                user_id: user.id,
+                username: user.username || '',
+                timestamp: Date.now()
+            }));
+
+            // Kasih feedback
+            tg.HapticFeedback.impactOccurred('medium');
+            tg.showPopup({
+                title: '✅ Terkirim!',
+                message: 'Perintah "' + perintah + '" dikirim ke bot. Cek chat!',
+                buttons: [{ type: 'ok' }]
+            });
+        }
+
+        // Fungsi tutup Mini App
         function tutupApp() {
             tg.close();
         }
+
+        // Efek haptic saat buka
+        tg.HapticFeedback.impactOccurred('light');
     </script>
 </body>
 </html>
